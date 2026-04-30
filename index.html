@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나의 수험생 MBTI는? | 마더텅 공부법 추천</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Gmarket+Sans:wght@300;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  :root {
+    --orange: #FF6B2B;
+    --orange-light: #FF8F5E;
+    --orange-pale: #FFF0EA;
+    --dark: #1A1A2E;
+    --gray: #6B7280;
+    --gray-light: #F3F4F6;
+    --white: #FFFFFF;
+    --radius: 20px;
+    --shadow: 0 8px 32px rgba(255, 107, 43, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #FFF8F5;
+    min-height: 100vh;
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* 배경 장식 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -100px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,107,43,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -100px;
+    left: -100px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(255,107,43,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* 헤더 */
+  .header {
+    text-align: center;
+    padding: 48px 0 32px;
+  }
+
+  .logo {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .logo::before, .logo::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1.5px;
+    background: var(--orange);
+    opacity: 0.5;
+  }
+
+  .header h1 {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--dark);
+    margin-bottom: 12px;
+  }
+
+  .header h1 span {
+    color: var(--orange);
+  }
+
+  .header p {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.7;
+  }
+
+  /* 진행 바 */
+  .progress-wrap {
+    margin-bottom: 32px;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-label {
+    font-size: 12px;
+    color: var(--gray);
+    font-weight: 500;
+  }
+
+  .progress-count {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--orange);
+  }
+
+  .progress-bar {
+    height: 6px;
+    background: #E5E7EB;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--orange), var(--orange-light));
+    border-radius: 99px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* 카드 */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    border: 1.5px solid rgba(255,107,43,0.08);
+  }
+
+  /* 질문 */
+  .question-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .question-num::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--orange-pale);
+  }
+
+  .question-text {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: clamp(16px, 4vw, 20px);
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 28px;
+    color: var(--dark);
+  }
+
+  /* 선택지 버튼 */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .option-btn {
+    width: 100%;
+    padding: 18px 22px;
+    background: var(--gray-light);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--dark);
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.5;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,107,43,0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .option-btn:hover {
+    border-color: var(--orange-light);
+    background: var(--orange-pale);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255,107,43,0.12);
+  }
+
+  .option-btn:hover::before { opacity: 1; }
+
+  .option-btn.selected {
+    border-color: var(--orange);
+    background: var(--orange-pale);
+    color: var(--orange);
+    font-weight: 700;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(255,107,43,0.2);
+  }
+
+  .option-btn.selected::after {
+    content: '✓';
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--orange);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* 축 레이블 */
+  .axis-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--orange-pale);
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 99px;
+    margin-bottom: 16px;
+  }
+
+  /* 결과 화면 */
+  .result-screen { display: none; }
+
+  .result-hero {
+    background: linear-gradient(135deg, var(--dark) 0%, #2D2D4E 100%);
+    border-radius: var(--radius);
+    padding: 40px 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-hero::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255,107,43,0.25) 0%, transparent 70%);
+  }
+
+  .result-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: -40px;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(255,107,43,0.15) 0%, transparent 70%);
+  }
+
+  .mbti-type {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: clamp(52px, 12vw, 72px);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mbti-type span { color: var(--orange); }
+
+  .mbti-name {
+    font-size: 16px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mbti-emoji {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mbti-keyword {
+    display: inline-flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .keyword-tag {
+    background: rgba(255,107,43,0.25);
+    color: var(--orange-light);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 99px;
+    border: 1px solid rgba(255,107,43,0.3);
+  }
+
+  /* 공부법 카드 */
+  .study-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+    border: 1.5px solid rgba(255,107,43,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+
+  .study-card-title {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .study-card-title .icon {
+    width: 32px;
+    height: 32px;
+    background: var(--orange-pale);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .study-method {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #374151;
+  }
+
+  .study-method strong {
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  .study-tip {
+    background: var(--orange-pale);
+    border-left: 3px solid var(--orange);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #92400E;
+    line-height: 1.6;
+  }
+
+  /* 추천 교재 */
+  .book-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    border: 1.5px solid rgba(255,107,43,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+
+  .book-title {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .book-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--gray-light);
+    border-radius: 12px;
+  }
+
+  .book-color {
+    width: 8px;
+    min-width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 6px;
+  }
+
+  .book-item-text {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .book-item-name {
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 2px;
+  }
+
+  .book-item-desc {
+    font-size: 12px;
+    color: var(--gray);
+  }
+
+  /* 공유 섹션 */
+  .share-section {
+    background: var(--dark);
+    border-radius: var(--radius);
+    padding: 28px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .share-section p {
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  .share-section strong {
+    color: var(--white);
+  }
+
+  /* 버튼 */
+  .btn-primary {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: var(--white);
+    border: none;
+    border-radius: 14px;
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 20px rgba(255,107,43,0.35);
+    letter-spacing: 0.5px;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(255,107,43,0.45);
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    color: var(--orange);
+    border: 2px solid var(--orange);
+    border-radius: 14px;
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-secondary:hover {
+    background: var(--orange-pale);
+  }
+
+  /* 시작 화면 */
+  .intro-screen {}
+
+  .intro-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .intro-badge {
+    background: var(--orange-pale);
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 99px;
+  }
+
+  .intro-desc {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+
+  /* 축 표시기 */
+  .axis-indicators {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .axis-item {
+    background: var(--gray-light);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .axis-item .axis-label {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 4px;
+  }
+
+  .axis-item .axis-desc {
+    font-size: 11px;
+    color: var(--gray);
+  }
+
+  /* 애니메이션 */
+  .fade-in {
+    animation: fadeIn 0.4s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide-in {
+    animation: slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* 반응형 */
+  @media (max-width: 480px) {
+    .container { padding: 0 16px 60px; }
+    .card { padding: 24px 20px; }
+    .result-hero { padding: 32px 20px; }
+    .study-card { padding: 22px 20px; }
+    .book-card { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 시작 화면 -->
+  <div id="intro-screen">
+    <div class="header">
+      <div class="logo">MOTHERTONGUE</div>
+      <h1>나의 수험생 MBTI는?<br><span>마더텅 공부법 추천</span></h1>
+      <p style="margin-top: 12px;">12개 질문으로 알아보는<br>나에게 딱 맞는 수험 공부법</p>
+    </div>
+
+    <div class="card fade-in">
+      <div class="intro-badges">
+        <span class="intro-badge">📝 12문항</span>
+        <span class="intro-badge">⏱ 약 2분</span>
+        <span class="intro-badge">🎯 16가지 유형</span>
+      </div>
+
+      <p class="intro-desc">
+        공부할 때 나는 어떤 스타일인가요?<br>
+        나의 공부 성향을 파악하고,<br>
+        마더텅 교재를 가장 효과적으로 활용하는<br>
+        <strong style="color: var(--dark);">나만의 공부법</strong>을 찾아보세요.
+      </p>
+
+      <div class="axis-indicators">
+        <div class="axis-item">
+          <div class="axis-label">E / I</div>
+          <div class="axis-desc">에너지 방향</div>
+        </div>
+        <div class="axis-item">
+          <div class="axis-label">S / N</div>
+          <div class="axis-desc">정보 수집</div>
+        </div>
+        <div class="axis-item">
+          <div class="axis-label">T / F</div>
+          <div class="axis-desc">판단 기준</div>
+        </div>
+        <div class="axis-item">
+          <div class="axis-label">J / P</div>
+          <div class="axis-desc">생활 방식</div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="startQuiz()">테스트 시작하기 →</button>
+    </div>
+  </div>
+
+  <!-- 퀴즈 화면 -->
+  <div id="quiz-screen" style="display:none;">
+    <div class="header" style="padding: 32px 0 20px;">
+      <div class="logo">MOTHERTONGUE</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span class="progress-label">진행 중</span>
+        <span class="progress-count" id="progress-count">1 / 12</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 8.33%"></div>
+      </div>
+    </div>
+
+    <div id="question-card" class="card fade-in">
+      <div class="question-num" id="question-num">Q1 · E / I</div>
+      <div class="question-text" id="question-text"></div>
+      <div class="options" id="options-container"></div>
+    </div>
+  </div>
+
+  <!-- 결과 화면 -->
+  <div id="result-screen" style="display:none;">
+    <div class="header" style="padding: 32px 0 20px;">
+      <div class="logo">MOTHERTONGUE</div>
+    </div>
+
+    <div class="result-hero slide-in">
+      <span class="mbti-emoji" id="result-emoji">📚</span>
+      <div class="mbti-type" id="result-type">INTJ</div>
+      <div class="mbti-name" id="result-name">전략적 분석가</div>
+      <div class="mbti-keyword" id="result-keywords"></div>
+    </div>
+
+    <div class="study-card fade-in" id="study-card">
+      <div class="study-card-title">
+        <div class="icon">📖</div>
+        이런 공부법이 잘 맞아요
+      </div>
+      <div class="study-method" id="study-method"></div>
+      <div class="study-tip" id="study-tip"></div>
+    </div>
+
+    <div class="book-card fade-in" id="book-card">
+      <div class="book-title">📦 추천 교재 조합</div>
+      <div class="book-list" id="book-list"></div>
+    </div>
+
+    <div class="study-card fade-in" id="blog-card" style="border: 1.5px solid rgba(255,107,43,0.25); background: var(--orange-pale);">
+      <div class="study-card-title">
+        <div class="icon">📝</div>
+        실제 수기 전체 읽어보기
+      </div>
+      <p style="font-size: 13px; color: #92400E; margin-bottom: 16px; line-height: 1.7;">공부법이 더 궁금하다면? 마더텅 블로그에서 실제 합격생의 수기를 더 자세히 읽어보세요.</p>
+      <a id="blog-link" href="#" target="_blank" style="text-decoration: none;">
+        <button class="btn-primary" id="blog-btn" style="font-size: 14px;">📖 수기 전체 보기 →</button>
+      </a>
+    </div>
+
+    <div class="share-section fade-in">
+      <p><strong>친구의 유형도 궁금하다면?</strong><br>링크를 공유해보세요!</p>
+      <button class="btn-primary" onclick="copyLink()">🔗 링크 복사하기</button>
+    </div>
+
+    <button class="btn-secondary" onclick="restart()">다시 테스트하기</button>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  // E/I 축
+  {
+    axis: 'E / I',
+    text: '공부할 때 나는',
+    options: [
+      { text: '혼자 조용히 집중하는 게 잘 된다', value: 'I' },
+      { text: '스터디나 독서실처럼 사람이 있는 곳이 더 잘 된다', value: 'E' }
+    ]
+  },
+  {
+    axis: 'E / I',
+    text: '모르는 문제가 생겼을 때',
+    options: [
+      { text: '혼자 끝까지 파고든다', value: 'I' },
+      { text: '빠르게 검색하거나 주변에 물어본다', value: 'E' }
+    ]
+  },
+  {
+    axis: 'E / I',
+    text: '하루 공부를 마치면',
+    options: [
+      { text: '혼자 오늘 공부를 정리하는 시간이 필요하다', value: 'I' },
+      { text: '누군가에게 오늘 뭐 했는지 말하고 싶다', value: 'E' }
+    ]
+  },
+  // S/N 축
+  {
+    axis: 'S / N',
+    text: '기출문제를 풀 때 나는',
+    options: [
+      { text: '한 문제 한 문제 꼼꼼히 분석한다', value: 'S' },
+      { text: '여러 문제를 빠르게 훑으며 패턴을 본다', value: 'N' }
+    ]
+  },
+  {
+    axis: 'S / N',
+    text: '공부 계획을 세울 때',
+    options: [
+      { text: '오늘 할 것을 구체적으로 목록으로 적는다', value: 'S' },
+      { text: '큰 방향만 잡고 그날그날 상황에 맞게 한다', value: 'N' }
+    ]
+  },
+  {
+    axis: 'S / N',
+    text: '틀린 문제를 볼 때',
+    options: [
+      { text: '왜 틀렸는지 원인을 정확히 파악한다', value: 'S' },
+      { text: '비슷한 유형을 더 많이 풀어 감을 익힌다', value: 'N' }
+    ]
+  },
+  // T/F 축
+  {
+    axis: 'T / F',
+    text: '성적이 안 오를 때',
+    options: [
+      { text: '뭐가 문제인지 냉정하게 분석한다', value: 'T' },
+      { text: '멘탈 관리가 먼저라고 생각한다', value: 'F' }
+    ]
+  },
+  {
+    axis: 'T / F',
+    text: '공부법을 고를 때',
+    options: [
+      { text: '효율이 증명된 방법을 따른다', value: 'T' },
+      { text: '나에게 맞는 느낌이 중요하다', value: 'F' }
+    ]
+  },
+  {
+    axis: 'T / F',
+    text: '오답노트를 쓸 때',
+    options: [
+      { text: '틀린 이유·해결책을 논리적으로 정리한다', value: 'T' },
+      { text: '내가 보기 편한 방식으로 꾸며가며 정리한다', value: 'F' }
+    ]
+  },
+  // J/P 축
+  {
+    axis: 'J / P',
+    text: '수능까지 남은 기간을 생각하면',
+    options: [
+      { text: '이미 월별 계획이 머릿속에 있다', value: 'J' },
+      { text: '그때그때 상황에 맞게 조정하는 편이다', value: 'P' }
+    ]
+  },
+  {
+    axis: 'J / P',
+    text: '모의고사 일정이 잡히면',
+    options: [
+      { text: '그 날짜에 맞춰 역산해서 준비한다', value: 'J' },
+      { text: '평소대로 공부하다가 당일 컨디션에 맞춘다', value: 'P' }
+    ]
+  },
+  {
+    axis: 'J / P',
+    text: '교재를 다 풀고 나면',
+    options: [
+      { text: '부족한 부분을 채우고 다음 단계로 넘어간다', value: 'J' },
+      { text: '새 교재보다 같은 걸 다시 보는 게 편하다', value: 'P' }
+    ]
+  }
+];
+
+const mbtiData = {
+  INTJ: {
+    emoji: '🔭', name: '전략적 분석가', keywords: ['계획적', '논리적', '독립적'],
+    method: `<strong>준범 님식 3분류 오답노트</strong>를 추천드려요.\n\n틀린 문제를 <strong>행동·실수·암기</strong> 세 영역으로 나눠 기록하세요. 행동에는 이 조건이 주어졌을 때 어떤 접근을 해야 하는지, 실수에는 원인과 재발 방지책, 암기에는 꼭 기억할 공식과 개념을 정리합니다. 모의고사 전 반드시 다시 읽어보는 루틴도 함께 세우세요.`,
+    tip: '💡 수학은 100분을 40-40-20으로 나눠 3회독 전략을 써보세요. 1회독에서 구상, 2회독에서 실행, 3회독에서 검토!',
+    books: [{ name: '수능기출문제집', desc: '단원별 기출 완전 분석 | 꼼꼼한 해설로 오답 정복', color: '#1A1A2E' }, { name: '수능기출 미니모의고사', desc: '짧게 끊어 집중도 유지 | 취약 단원 집중 공략', color: '#FF6B2B' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224263398924', blogName: '준범 님 수기 전체 보기 →'
+  },
+  INTP: {
+    emoji: '🔬', name: '탐구하는 사색가', keywords: ['분석적', '호기심', '원리 탐구'],
+    method: `<strong>지안 님식 발상노트+개념노트</strong>를 추천드려요.\n\n발상노트에는 생소했던 발문이나 해석이 어려웠던 문장을 적어두고, 개념노트에는 단순 개념이 아닌 <strong>문제 번호와 사용된 개념을 연결</strong>해서 작성하세요. 한 문제에 대해 여러 풀이를 모두 시도하며 사고의 폭을 넓히는 게 핵심입니다.`,
+    tip: '💡 추론형 문제는 시간이 오래 걸려도 첫 번째 풀이 방향을 끝까지 고집해보세요. 당위성이 쌓입니다.',
+    books: [{ name: '수능기출문제집', desc: '단계별 풀이로 원리 파악 | 조건 분석 훈련', color: '#1A1A2E' }, { name: '수능기출문제집 (다른 과목)', desc: '개념 연결 학습으로 깊이 확장', color: '#374151' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224267914883', blogName: '지안 님 수기 전체 보기 →'
+  },
+  ENTJ: {
+    emoji: '🚀', name: '목표 지향 리더', keywords: ['추진력', '전략적', '효율 중시'],
+    method: `<strong>형욱 님식 내신-수능 병행 전략</strong>을 추천드려요.\n\n내신 준비 기간에도 EBS 부교재와 마더텅 수능기출문제집을 함께 활용해 수능 연계 내용과 기출 학습을 동시에 진행하세요. <strong>시간을 낭비하지 않는 이중 효율</strong>이 목표입니다.`,
+    tip: '💡 매일 경제는 5문제씩, 꾸준히! 한 번에 몰아 푸는 것보다 매일 일정량을 유지하는 게 훨씬 효과적입니다.',
+    books: [{ name: '수능기출문제집', desc: '체계적 기출 분석 | 내신-수능 동시 대비', color: '#1A1A2E' }, { name: '수능기출 모의고사', desc: '실전 감각 유지 | 주말 1~2회 실전 응시', color: '#FF6B2B' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224261009673', blogName: '형욱 님 수기 전체 보기 →'
+  },
+  ENTP: {
+    emoji: '⚡', name: '창의적 도전자', keywords: ['창의적', '다각도 사고', '즉흥적'],
+    method: `<strong>지안 님식 다중 풀이 탐색법</strong>을 추천드려요.\n\n하나의 문제에 대해 가능한 <strong>여러 풀이 방법을 모두 시도</strong>하세요. 고전 역학 문제에서 일-에너지 정리와 평균 속도를 모두 써보거나, 추론형 문제에서 다른 방향의 접근을 모색하는 방식입니다. 다양한 각도가 실력이 됩니다.`,
+    tip: '💡 모의고사에서 평가원과 결이 안 맞는다고 느낀 문제는 과감히 오답 분석을 생략하세요. 평가원의 사고를 유지하는 게 우선!',
+    books: [{ name: '수능기출문제집', desc: '다양한 유형 탐색 | 발상 훈련', color: '#1A1A2E' }, { name: '수능기출 고난도 미니모의고사', desc: '고난도 문제로 사고 확장 (국어·영어)', color: '#DC2626' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224267914883', blogName: '지안 님 수기 전체 보기 →'
+  },
+  INFJ: {
+    emoji: '🌙', name: '통찰력 있는 완성자', keywords: ['통찰력', '완성도', '깊이 추구'],
+    method: `<strong>성현 님식 EBS 완전 체화 전략</strong>을 추천드려요.\n\nEBS 교재와 지문을 <strong>3회독 이상 반복</strong>해서 지문을 거의 외우다시피 할 정도로 체화하세요. 국어·영어에서 특히 효과적이며, 시험장에서 시간 절약에 결정적으로 도움이 됩니다.`,
+    tip: '💡 단순히 읽는 것으로 끝내지 말고, 지문을 어떻게 구조화해서 독해할지 생각하며 읽으세요.',
+    books: [{ name: '수능기출문제집', desc: 'EBS 연계 기출 완전 정복', color: '#1A1A2E' }, { name: '수능기출 미니모의고사', desc: '감각 유지 + 짧게 끊어 집중', color: '#FF6B2B' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224239545812', blogName: '성현 님 EBS 연계 수기 보기 →'
+  },
+  INFP: {
+    emoji: '🌸', name: '감성적인 탐험가', keywords: ['감성적', '창의적', '자기만의 방식'],
+    method: `<strong>형욱 님식 나만의 단권화 오답노트</strong>를 추천드려요.\n\n틀린 문제의 핵심 선지나 그래프를 <strong>나만의 언어로 정리</strong>하세요. 수능 전날에도 이 노트 하나만 펼쳐보면 될 만큼, 나에게 최적화된 단권화 노트를 만드는 것이 목표입니다.`,
+    tip: '💡 개념서를 다시 찾아보는 수고를 줄이고, 내 노트 하나로 모든 걸 해결할 수 있도록 정리해보세요.',
+    books: [{ name: '수능기출문제집', desc: '나만의 오답 노트 베이스', color: '#1A1A2E' }, { name: '수능기출 미니모의고사', desc: '부담 없이 꾸준히 감각 유지', color: '#FF6B2B' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224261009673', blogName: '형욱 님 수기 전체 보기 →'
+  },
+  ENFJ: {
+    emoji: '☀️', name: '따뜻한 계획가', keywords: ['성실함', '계획적', '꾸준함'],
+    method: `<strong>승윤 님식 과목별 루틴 + 3회독 전략</strong>을 추천드려요.\n\n마더텅 수능기출문제집을 <strong>최근 기출부터 주요 과거 기출까지 3회독</strong>하세요. 국어·영어는 지문이 어떻게 구조화되는지, 수학·과학은 어떤 능력을 요구하는지를 학습하며 머릿속에 쌓아가는 방식입니다.`,
+    tip: '💡 7월부터는 주 1회 이상, 9월 이후엔 주 3회 이상 실전 모의고사를 응시하며 리듬을 익히세요.',
+    books: [{ name: '수능기출문제집', desc: '3회독 기출 분석 | 과목별 루틴', color: '#1A1A2E' }, { name: '수능기출 모의고사', desc: '실전 리듬 유지 | 주기적 실전 응시', color: '#FF6B2B' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224202336672', blogName: '승윤 님 재수 커리 수기 보기 →'
+  },
+  ENFP: {
+    emoji: '🎨', name: '열정적인 자유인', keywords: ['열정적', '즉흥적', '에너지 넘침'],
+    method: `<strong>준범 님식 격일 병행 + 주말 실전 루틴</strong>을 추천드려요.\n\n강의를 통한 개념 정리와 기출 분석을 <strong>격일로 병행</strong>하고, 주말에는 실전 모의고사 1~2회를 응시하세요. 매일 오전에는 언어와 매체 모의고사나 주간지를 풀어 낯선 지문에 대한 감각을 유지하는 것도 포인트!`,
+    tip: '💡 평가원 결이 안 맞는 사설 문제는 과감히 건너뛰어도 괜찮아요. 나의 에너지는 평가원에 집중!',
+    books: [{ name: '수능기출 미니모의고사', desc: '짧게 끊어 집중 | 매일 루틴 유지', color: '#FF6B2B' }, { name: '수능기출 모의고사', desc: '주말 실전 감각 | 시험 리듬 체화', color: '#374151' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224263398924', blogName: '준범 님 수기 전체 보기 →'
+  },
+  ISTJ: {
+    emoji: '🏛️', name: '꼼꼼한 현실주의자', keywords: ['꼼꼼함', '반복', '안정 추구'],
+    method: `<strong>주연 님식 백지복습법</strong>을 추천드려요.\n\n교과서와 문제집을 바탕으로 개념을 노트에 정리한 뒤, 그 노트를 보지 않고 <strong>백지에 처음부터 끝까지</strong> 다시 적어보세요. 내가 정확히 아는 것과 모르는 것이 명확히 드러납니다. 개념 간 연결이 중요한 과목에 특히 효과적!`,
+    tip: '💡 2~3회독을 목표로, 실수로 틀린 문제라도 원인을 찾아 발췌해두고 지속적으로 다시 보세요.',
+    books: [{ name: '수능기출문제집', desc: '꼼꼼한 2~3회독 | 오답 발췌 반복', color: '#1A1A2E' }, { name: '수능기출 모의고사', desc: '단원별 완성 후 실전 적용', color: '#374151' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224269369091', blogName: '주연 님 수기 전체 보기 →'
+  },
+  ISFJ: {
+    emoji: '🌿', name: '성실한 수호자', keywords: ['성실함', '꾸준함', '체계적'],
+    method: `<strong>형욱 님식 매일 5문제 꾸준히</strong>를 추천드려요.\n\n한 번에 많은 양을 몰아 푸는 것보다 <strong>매일 일정량씩</strong> 모든 과목을 골고루 다루세요. 실전 모의고사 날을 제외한 날에는 매일 5문제 정도씩 풀면서 감을 잃지 않는 것이 핵심!`,
+    tip: '💡 틀린 문제는 실수로 틀린 것이라도 원인을 찾고 발췌해서 이후에도 반복해서 보는 습관을 들이세요.',
+    books: [{ name: '수능기출문제집', desc: '매일 꾸준한 기출 분석', color: '#1A1A2E' }, { name: '수능기출 미니모의고사', desc: '짧게 끊어 감각 유지 | 부담 없이 꾸준히', color: '#FF6B2B' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224261009673', blogName: '형욱 님 수기 전체 보기 →'
+  },
+  ESTJ: {
+    emoji: '📋', name: '효율적인 관리자', keywords: ['현실적', '효율적', '규칙 중시'],
+    method: `<strong>준범 님식 시간 운용 전략</strong>을 추천드려요.\n\n수학 100분을 <strong>40-40-20분으로 나눠 3회독</strong>하세요. 1회독에서 빠른 문제 + 고난도 구상, 2회독에서 고난도 실행, 3회독에서 검토. 이 분배가 실전에서 자연스럽게 이루어질 때까지 평소 모의고사에서 의식적으로 연습하세요.`,
+    tip: '💡 실전 모의고사는 실력 측정뿐 아니라 시험 운용 연습 도구예요. 어떤 순서로 풀고, 모르는 문제를 어떻게 처리할지 미리 정하세요.',
+    books: [{ name: '수능기출문제집', desc: '체계적 기출 분석 | 풀이 정당성 훈련', color: '#1A1A2E' }, { name: '수능기출 모의고사', desc: '시간 운용 전략 체화 | 실전 반복', color: '#FF6B2B' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224263398924', blogName: '준범 님 수기 전체 보기 →'
+  },
+  ESFJ: {
+    emoji: '🤝', name: '배려하는 조화가', keywords: ['따뜻함', '배려', '루틴 중시'],
+    method: `<strong>성현 님식 아침 루틴 고정법</strong>을 추천드려요.\n\n아무리 피곤해도 수능 국어 시험 시간인 <strong>8시 40분부터 10시까지는 국어 공부</strong>에 집중하세요. 매일 반복하여 아침에 국어 지문이 자연스레 읽히도록 훈련하는 것이 목표입니다.`,
+    tip: '💡 EBS 교재를 3회독 이상 반복해 지문을 거의 외우다시피 하면, 실제 시험장에서 시간 절약에 결정적으로 도움이 됩니다.',
+    books: [{ name: '수능기출문제집', desc: 'EBS 연계 기출 완전 체화', color: '#1A1A2E' }, { name: '수능기출 모의고사', desc: '아침 루틴용 실전 연습', color: '#374151' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224251717637', blogName: '성현 님 실전 모의고사 수기 보기 →'
+  },
+  ISTP: {
+    emoji: '🔧', name: '실용적인 해결사', keywords: ['실용적', '도구 중심', '즉각적'],
+    method: `<strong>지안 님식 추론형 집중 훈련법</strong>을 추천드려요.\n\n추론형 문제는 처음 보았을 때 시간이 오래 걸려도 <strong>첫 번째 풀이 방향을 끝까지 고집</strong>해보세요. 풀었어도 시간이 오래 걸렸다면 마더텅 해설지를 통해 더 효율적인 풀이를 찾아보는 것이 핵심!`,
+    tip: '💡 마더텅 해설지는 자료를 어디서 분석하고, 어디서 풀이를 시작해야 하는지를 명확히 제시해줘요. 이걸 적극적으로 활용하세요.',
+    books: [{ name: '수능기출문제집', desc: '풀이 정당성 분석 | 효율적 접근법 습득', color: '#1A1A2E' }, { name: '수능기출 고난도 미니모의고사', desc: '실전 감각 + 고난도 도전 (국어·영어)', color: '#DC2626' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224267914883', blogName: '지안 님 수기 전체 보기 →'
+  },
+  ISFP: {
+    emoji: '🎵', name: '유연한 감각파', keywords: ['유연함', '감각적', '현재 집중'],
+    method: `<strong>주연 님식 개념형·추론형 분리 접근법</strong>을 추천드려요.\n\n개념형 문제는 최대한 많은 문제를 보고 시간을 단축하는 연습을, 추론형 문제는 한 문제를 오래 고민하며 풀이 방향성을 잡는 훈련을 하세요. <strong>두 유형에 다른 전략</strong>을 쓰는 게 핵심입니다.`,
+    tip: '💡 틀린 문제를 바로 해설 보지 말고, 왜 틀렸는지 스스로 생각해본 뒤 해설과 비교해보세요. 이해도가 훨씬 높아집니다.',
+    books: [{ name: '수능기출 미니모의고사', desc: '짧게 끊어 부담 없이 꾸준히', color: '#FF6B2B' }, { name: '수능기출문제집', desc: '개념형 집중 훈련 | 빠른 적용 연습', color: '#1A1A2E' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224269369091', blogName: '주연 님 수기 전체 보기 →'
+  },
+  ESTP: {
+    emoji: '🏆', name: '도전적인 실전가', keywords: ['도전적', '경험 중심', '실전파'],
+    method: `<strong>성현 님식 주 3회 실전 모의고사 전략</strong>을 추천드려요.\n\n9월 모의평가 이후부터는 <strong>매주 3번 이상 전 과목 모의고사</strong>를 실제 시간표대로 응시하세요. 틀린 문제는 실수노트·오답노트를 과목별로 만들어 수능 직전까지 반복해서 보는 게 핵심!`,
+    tip: '💡 실전 모의고사는 실력 측정이 아닌 시험 운용 연습이에요. 모르는 문제를 만났을 때 과감하게 넘어가는 연습도 같이 하세요.',
+    books: [{ name: '수능기출 모의고사', desc: '주기적 실전 응시 | 시험 리듬 체화', color: '#FF6B2B' }, { name: '수능기출 고난도 미니모의고사', desc: '고난도 문제 집중 공략 (국어·영어)', color: '#DC2626' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224251717637', blogName: '성현 님 실전 모의고사 수기 보기 →'
+  },
+  ESFP: {
+    emoji: '🎉', name: '활기찬 즉흥파', keywords: ['활동적', '즉흥적', '재미 추구'],
+    method: `<strong>원준 님식 오답노트 단권화 (짧게 시각화)</strong>를 추천드려요.\n\n마더텅 수능기출문제집을 풀면서 틀렸던 문제들의 핵심 선지나 그래프를 <strong>나만의 단권화 노트에 짧고 시각적으로</strong> 정리하세요. 수능 직전 이 노트 하나만 봐도 될 만큼 압축해서 만드는 것이 목표!`,
+    tip: '💡 오답 정리는 나중에 펼쳤을 때 틀렸던 문제가 바로 떠올라야 해요. 길게 쓰기보다 핵심만 짧게 시각화해보세요.',
+    books: [{ name: '수능기출 미니모의고사', desc: '짧게 끊어 부담 없이 꾸준히', color: '#FF6B2B' }, { name: '수능기출 모의고사', desc: '실전 감각 + 단권화 오답 적용', color: '#374151' }],
+    blogUrl: 'https://blog.naver.com/mothertbook/224231571169', blogName: '원준 님 수기 전체 보기 →'
+  }
+};
+
+let currentQ = 0;
+let scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+function startQuiz() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('question-num').textContent = `Q${currentQ + 1} · ${q.axis}`;
+  document.getElementById('question-text').textContent = q.text;
+  document.getElementById('progress-count').textContent = `${currentQ + 1} / 12`;
+  document.getElementById('progress-fill').style.width = `${((currentQ + 1) / 12) * 100}%`;
+
+  const container = document.getElementById('options-container');
+  container.innerHTML = '';
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt.text;
+    btn.onclick = () => selectAnswer(opt.value, btn);
+    container.appendChild(btn);
+  });
+
+  const card = document.getElementById('question-card');
+  card.classList.remove('fade-in');
+  void card.offsetWidth;
+  card.classList.add('fade-in');
+}
+
+function selectAnswer(value, btn) {
+  // 선택 표시
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  // 점수 기록
+  scores[value]++;
+
+  // 다음 질문으로
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) {
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 350);
+}
+
+function getMBTI() {
+  const E_or_I = scores.E >= scores.I ? 'E' : 'I';
+  const S_or_N = scores.S >= scores.N ? 'S' : 'N';
+  const T_or_F = scores.T >= scores.F ? 'T' : 'F';
+  const J_or_P = scores.J >= scores.P ? 'J' : 'P';
+  return E_or_I + S_or_N + T_or_F + J_or_P;
+}
+
+function showResult() {
+  document.getElementById('quiz-screen').style.display = 'none';
+  document.getElementById('result-screen').style.display = 'block';
+
+  const mbti = getMBTI();
+  const data = mbtiData[mbti];
+
+  document.getElementById('result-emoji').textContent = data.emoji;
+  document.getElementById('result-type').innerHTML = mbti.split('').map((c, i) => i < 2 ? c : `<span>${c}</span>`).join('');
+  document.getElementById('result-name').textContent = data.name;
+
+  const kw = document.getElementById('result-keywords');
+  kw.innerHTML = data.keywords.map(k => `<span class="keyword-tag">${k}</span>`).join('');
+
+  document.getElementById('study-method').innerHTML = data.method.replace(/\n/g, '<br><br>');
+  document.getElementById('study-tip').textContent = data.tip;
+
+  const bookList = document.getElementById('book-list');
+  bookList.innerHTML = data.books.map(b => `
+    <div class="book-item">
+      <div class="book-color" style="background: ${b.color}"></div>
+      <div class="book-item-text">
+        <div class="book-item-name">마더텅 ${b.name}</div>
+        <div class="book-item-desc">${b.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('blog-link').href = data.blogUrl;
+  document.getElementById('blog-btn').textContent = `📖 ${data.blogName}`;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyLink() {
+  const url = window.location.href;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.querySelector('.share-section .btn-primary');
+      const orig = btn.textContent;
+      btn.textContent = '✅ 링크가 복사되었어요!';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  } else {
+    const input = document.createElement('input');
+    input.value = url;
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand('copy');
+    document.body.removeChild(input);
+    alert('링크가 복사되었어요!');
+  }
+}
+
+function restart() {
+  currentQ = 0;
+  scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('quiz-screen').style.display = 'block';
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
