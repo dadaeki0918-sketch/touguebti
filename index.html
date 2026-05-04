@@ -1173,14 +1173,45 @@ function startQuiz() {
   renderQuestion();
 }
 
+function selectAnswer(value, btn) {
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => {
+    b.onclick = null;
+    b.style.pointerEvents = 'none';
+  });
+
+  btn.classList.add('selected');
+  answers[currentQ] = value;
+  scores[value]++;
+
+  // 카드 즉시 숨기고 → 내용 교체 → 다시 표시
+  const card = document.getElementById('question-card');
+  card.style.visibility = 'hidden';
+  card.style.opacity = '0';
+
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < shuffledQuestions.length) {
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 150);
+}
+
 function renderQuestion() {
+  const card = document.getElementById('question-card');
+
+  // 먼저 숨긴 상태로 내용 교체
+  card.style.visibility = 'hidden';
+  card.style.opacity = '0';
+
   const q = shuffledQuestions[currentQ];
   document.getElementById('question-num').textContent = `Q${currentQ + 1}`;
   document.getElementById('question-text').textContent = q.text;
   document.getElementById('progress-count').textContent = `${currentQ + 1} / 12`;
   document.getElementById('progress-fill').style.width = `${((currentQ + 1) / 12) * 100}%`;
 
-  // 이전 버튼: 2번째 문항부터 표시
   const backBtn = document.getElementById('back-btn');
   backBtn.style.display = currentQ >= 1 ? 'block' : 'none';
 
@@ -1191,53 +1222,15 @@ function renderQuestion() {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
     btn.textContent = opt.text;
-    btn.style.opacity = '0';
     btn.onclick = () => selectAnswer(opt.value, btn);
     container.appendChild(btn);
   });
 
-  // 카드 전체 fade 대신 개별 버튼 fade-in (잔상 방지)
+  // 내용 교체 완료 후 카드 표시 (transition으로 부드럽게)
   requestAnimationFrame(() => {
-    container.querySelectorAll('.option-btn').forEach((btn, i) => {
-      setTimeout(() => {
-        btn.style.transition = 'opacity 0.2s ease';
-        btn.style.opacity = '1';
-      }, i * 40);
-    });
-  });
-
-  const card = document.getElementById('question-card');
-  card.classList.remove('fade-in');
-  void card.offsetWidth;
-  card.classList.add('fade-in');
-}
-
-function selectAnswer(value, btn) {
-  // 중복 클릭 방지 - 즉시 모든 버튼 비활성화
-  const allBtns = document.querySelectorAll('.option-btn');
-  allBtns.forEach(b => {
-    b.onclick = null;
-    b.style.pointerEvents = 'none';
-  });
-
-  // 선택 표시
-  btn.classList.add('selected');
-
-  answers[currentQ] = value;
-  scores[value]++;
-
-  // 선택 피드백 후 즉시 컨텐츠 교체 (setTimeout 없음)
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      document.getElementById('options-container').innerHTML = '';
-      document.getElementById('question-text').textContent = '';
-      currentQ++;
-      if (currentQ < shuffledQuestions.length) {
-        renderQuestion();
-      } else {
-        showResult();
-      }
-    });
+    card.style.transition = 'opacity 0.25s ease';
+    card.style.visibility = 'visible';
+    card.style.opacity = '1';
   });
 }
 
