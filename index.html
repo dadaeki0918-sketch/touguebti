@@ -596,7 +596,95 @@
     to { opacity: 1; transform: scale(1) translateY(0); }
   }
 
-  /* 반응형 */
+  /* CTA 섹션 */
+  .cta-section {
+    background: var(--dark);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .cta-title {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cta-btn {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: all 0.2s ease;
+  }
+
+  .cta-btn-icon {
+    font-size: 22px;
+    min-width: 28px;
+    text-align: center;
+  }
+
+  .cta-btn-main {
+    font-family: 'Gmarket Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+
+  .cta-btn-sub {
+    font-size: 11px;
+    opacity: 0.7;
+  }
+
+  .cta-btn-primary {
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: var(--white);
+    box-shadow: 0 4px 20px rgba(255,107,43,0.4);
+  }
+
+  .cta-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(255,107,43,0.5);
+  }
+
+  .cta-btn-secondary {
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+    border: 1.5px solid rgba(255,255,255,0.15);
+  }
+
+  .cta-btn-secondary:hover {
+    background: rgba(255,255,255,0.14);
+    transform: translateY(-2px);
+  }
+
+  .cta-btn-share {
+    background: rgba(255,107,43,0.12);
+    color: var(--orange-light);
+    border: 1.5px solid rgba(255,107,43,0.25);
+    font-family: inherit;
+  }
+
+  .cta-btn-share:hover {
+    background: rgba(255,107,43,0.2);
+    transform: translateY(-2px);
+  }
   @media (max-width: 480px) {
     .container { padding: 0 16px 60px; }
     .card { padding: 24px 20px; }
@@ -698,6 +786,9 @@
       </div>
       <div class="study-method" id="study-method"></div>
       <div class="study-tip" id="study-tip"></div>
+      <a id="blog-link" href="#" target="_blank" style="text-decoration: none; display: block; margin-top: 16px;">
+        <button class="btn-secondary" id="blog-btn" style="width: 100%; margin-top: 0; font-size: 13px; padding: 13px;">📝 이 공부법 수기 전체 보기 →</button>
+      </a>
     </div>
 
     <div class="book-card fade-in" id="book-card">
@@ -705,23 +796,33 @@
       <div class="book-list" id="book-list"></div>
     </div>
 
-    <div class="study-card fade-in" id="blog-card" style="border: 1.5px solid rgba(255,107,43,0.25); background: var(--orange-pale);">
-      <div class="study-card-title">
-        <div class="icon">📝</div>
-        실제 수기 전체 읽어보기
+    <div class="cta-section fade-in">
+      <div class="cta-title">📌 다음 단계</div>
+      <div class="cta-buttons">
+        <a href="https://www.toptutor.co.kr/board/index.jsp?code=t_note" target="_blank" class="cta-btn cta-btn-primary">
+          <span class="cta-btn-icon">📖</span>
+          <div class="cta-btn-text">
+            <div class="cta-btn-main">나와 비슷한 성향의 합격생 공부법 보기</div>
+            <div class="cta-btn-sub">마더텅 교재 사용 우수 후기 →</div>
+          </div>
+        </a>
+        <a href="https://book.toptutor.co.kr/main/index.jsp" target="_blank" class="cta-btn cta-btn-secondary">
+          <span class="cta-btn-icon">📦</span>
+          <div class="cta-btn-text">
+            <div class="cta-btn-main">내 성향에 맞는 마더텅 교재 보러가기</div>
+            <div class="cta-btn-sub">마더텅 인터넷서점 →</div>
+          </div>
+        </a>
       </div>
-      <p style="font-size: 13px; color: #92400E; margin-bottom: 16px; line-height: 1.7;">공부법이 더 궁금하다면? 마더텅 블로그에서 실제 합격생의 수기를 더 자세히 읽어보세요.</p>
-      <a id="blog-link" href="#" target="_blank" style="text-decoration: none;">
-        <button class="btn-primary" id="blog-btn" style="font-size: 14px;">📖 수기 전체 보기 →</button>
-      </a>
     </div>
 
     <div class="share-section fade-in">
-      <p><strong>친구의 유형도 궁금하다면?</strong><br>링크를 공유해보세요!</p>
+      <p><strong>친구의 유형도 궁금하다면?</strong><br>공유하거나 결과를 저장해보세요!</p>
       <button class="btn-primary" onclick="copyLink()">🔗 링크 복사하기</button>
+      <button class="btn-secondary" onclick="saveImage()" style="margin-top: 10px;">📸 결과 이미지 저장하기</button>
     </div>
 
-    <button class="btn-secondary" onclick="restart()">다시 테스트하기</button>
+    <button class="btn-secondary" onclick="restart()" style="margin-top: 0;">↺ 다시 테스트하기</button>
   </div>
 
 </div>
@@ -1034,9 +1135,105 @@ function showResult() {
   `).join('');
 
   document.getElementById('blog-link').href = data.blogUrl;
-  document.getElementById('blog-btn').textContent = `📖 ${data.blogName}`;
+  document.getElementById('blog-btn').textContent = `📝 ${data.blogName}`;
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function saveImage() {
+  const btn = document.querySelector('.share-section .btn-secondary');
+  const orig = btn.textContent;
+  btn.textContent = '⏳ 저장 중...';
+  btn.disabled = true;
+
+  if (!window.html2canvas) {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    script.onload = () => captureResult(btn, orig);
+    document.head.appendChild(script);
+  } else {
+    captureResult(btn, orig);
+  }
+}
+
+function captureResult(btn, orig) {
+  const mbti = getMBTI();
+  const data = mbtiData[mbti];
+
+  // 캡처용 임시 div 생성
+  const wrap = document.createElement('div');
+  wrap.style.cssText = `
+    position: fixed; left: -9999px; top: 0;
+    width: 640px; background: #FFF8F5;
+    padding: 40px 32px; font-family: 'Noto Sans KR', sans-serif;
+    color: #1A1A2E; box-sizing: border-box;
+  `;
+
+  wrap.innerHTML = `
+    <div style="text-align:center; margin-bottom: 24px;">
+      <div style="font-size:11px; font-weight:700; color:#FF6B2B; letter-spacing:3px; margin-bottom:16px;">— MOTHERTONGUE —</div>
+      <div style="font-size:13px; color:#6B7280;">나의 수험생 공부 성향 테스트 결과</div>
+    </div>
+
+    <div style="background: linear-gradient(135deg, #1A1A2E 0%, #2D2D4E 100%); border-radius:20px; padding:40px 28px; text-align:center; margin-bottom:20px;">
+      <div style="font-size:52px; margin-bottom:12px;">${data.emoji}</div>
+      <div style="font-family:'Gmarket Sans',sans-serif; font-size:64px; font-weight:700; color:#fff; letter-spacing:4px; margin-bottom:8px;">
+        ${mbti.substring(0,2)}<span style="color:#FF6B2B;">${mbti.substring(2)}</span>
+      </div>
+      <div style="font-size:16px; color:rgba(255,255,255,0.7); margin-bottom:20px;">${data.name}</div>
+      <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
+        ${data.keywords.map(k => `<span style="background:rgba(255,107,43,0.25); color:#FF8F5E; font-size:12px; padding:5px 12px; border-radius:99px; border:1px solid rgba(255,107,43,0.3);">${k}</span>`).join('')}
+      </div>
+    </div>
+
+    <div style="background:#fff; border-radius:20px; padding:28px; margin-bottom:16px; border:1.5px solid rgba(255,107,43,0.1);">
+      <div style="font-size:13px; font-weight:700; color:#1A1A2E; margin-bottom:14px;">📖 이런 공부법이 잘 맞아요</div>
+      <div style="font-size:13px; line-height:1.8; color:#374151;">${data.method.replace(/\n/g,'').replace(/<strong>/g,'').replace(/<\/strong>/g,'')}</div>
+      <div style="background:#FFF0EA; border-left:3px solid #FF6B2B; border-radius:0 10px 10px 0; padding:12px 16px; margin-top:14px; font-size:12px; color:#92400E; line-height:1.6;">${data.tip}</div>
+    </div>
+
+    <div style="background:#fff; border-radius:20px; padding:24px 28px; border:1.5px solid rgba(255,107,43,0.1);">
+      <div style="font-size:13px; font-weight:700; color:#1A1A2E; margin-bottom:14px;">📦 추천 교재 조합</div>
+      ${data.books.map(b => `
+        <div style="display:flex; align-items:flex-start; gap:12px; padding:12px 14px; background:#F3F4F6; border-radius:12px; margin-bottom:8px;">
+          <div style="width:8px; min-width:8px; height:8px; border-radius:50%; background:${b.color}; margin-top:5px;"></div>
+          <div>
+            <div style="font-size:13px; font-weight:700; color:#1A1A2E; margin-bottom:2px;">마더텅 ${b.name}</div>
+            <div style="font-size:12px; color:#6B7280;">${b.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div style="text-align:center; margin-top:24px; font-size:12px; color:#9CA3AF;">
+      마더텅 공부 성향 테스트 · toptutor.co.kr
+    </div>
+  `;
+
+  document.body.appendChild(wrap);
+
+  html2canvas(wrap, {
+    backgroundColor: '#FFF8F5',
+    scale: 2,
+    useCORS: true,
+    logging: false,
+    width: 640,
+    windowWidth: 640
+  }).then(canvas => {
+    document.body.removeChild(wrap);
+    const link = document.createElement('a');
+    link.download = `마더텅_수험생_${mbti}_공부법.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    btn.textContent = '✅ 저장 완료!';
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  }).catch(() => {
+    document.body.removeChild(wrap);
+    btn.textContent = orig;
+    btn.disabled = false;
+    alert('이미지 저장에 실패했어요. 다시 시도해보세요.');
+  });
 }
 
 function copyLink() {
