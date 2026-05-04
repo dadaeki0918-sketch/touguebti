@@ -1202,23 +1202,26 @@ function renderQuestion() {
 }
 
 function selectAnswer(value, btn) {
-  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  // 중복 클릭 방지
+  document.querySelectorAll('.option-btn').forEach(b => {
+    b.onclick = null;
+    b.style.pointerEvents = 'none';
+  });
   btn.classList.add('selected');
 
-  // 현재 문항 답 기록 (이전 문항이 있으면 덮어쓰기)
   answers[currentQ] = value;
   scores[value]++;
 
   setTimeout(() => {
-    // 선택 상태 초기화 후 다음 문항으로
-    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    // 다음 문항 렌더링 전 컨테이너 즉시 초기화
+    document.getElementById('options-container').innerHTML = '';
     currentQ++;
     if (currentQ < shuffledQuestions.length) {
       renderQuestion();
     } else {
       showResult();
     }
-  }, 350);
+  }, 300);
 }
 
 function goBack() {
