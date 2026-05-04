@@ -1193,13 +1193,69 @@ function shuffleQuestions() {
 
 let shuffledQuestions = shuffleQuestions();
 
+/* ============================================================
+ * GTM dataLayer 헬퍼 및 상태 변수
+ * 컨테이너: GTM-PDP53X8B
+ * 이벤트: quiz_start / quiz_step / quiz_back / long_stay_step
+ *         quiz_complete / cta_click / share_action
+ * ============================================================ */
+window.dataLayer = window.dataLayer || [];
+const QUIZ_ID = 'study_mbti_v1';
+const LONG_STAY_THRESHOLD_MS = 30000;
+let quizStartTs = 0;
+let longStayTimer = null;
+let longStayFired = {};
+
+function dlPush(eventName, params) {
+  try {
+    var payload = Object.assign({ event: eventName }, params || {});
+    window.dataLayer.push(payload);
+  } catch (e) { /* no-op */ }
+}
+
+function clearLongStayTimer() {
+  if (longStayTimer) {
+    clearTimeout(longStayTimer);
+    longStayTimer = null;
+  }
+}
+
+function startLongStayTimer(stepIdx) {
+  clearLongStayTimer();
+  if (longStayFired[stepIdx]) return;
+  longStayTimer = setTimeout(function () {
+    var q = shuffledQuestions[stepIdx];
+    if (!q) return;
+    longStayFired[stepIdx] = true;
+    dlPush('long_stay_step', {
+      quiz_id: QUIZ_ID,
+      step_number: stepIdx + 1,
+      step_axis: q.axis,
+      step_title: q.text,
+      threshold_sec: LONG_STAY_THRESHOLD_MS / 1000
+    });
+  }, LONG_STAY_THRESHOLD_MS);
+}
+
+function getCurrentMBTI() {
+  try { return getMBTI(); } catch (e) { return null; }
+}
+
 function startQuiz() {
   shuffledQuestions = shuffleQuestions();
   currentQ = 0;
   scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
   answers = [];
+  quizStartTs = Date.now();
+  longStayFired = {};
   document.getElementById('intro-screen').style.display = 'none';
   document.getElementById('quiz-screen').style.display = 'block';
+
+  dlPush('quiz_start', {
+    quiz_id: QUIZ_ID,
+    total_steps: shuffledQuestions.length
+  });
+
   renderQuestion();
 }
 
@@ -1210,6 +1266,19 @@ function selectAnswer(value, btn) {
     b.style.pointerEvents = 'none';
   });
   btn.classList.add('selected');
+
+  // ── GTM: quiz_step ─────────────────────────────────────
+  clearLongStayTimer();
+  var _q = shuffledQuestions[currentQ];
+  dlPush('quiz_step', {
+    quiz_id: QUIZ_ID,
+    step_number: currentQ + 1,
+    step_total: shuffledQuestions.length,
+    step_axis: _q ? _q.axis : null,
+    step_title: _q ? _q.text : null,
+    selected_value: value,
+    selected_text: btn ? btn.textContent : null
+  });
 
   answers[currentQ] = value;
   scores[value]++;
@@ -1257,10 +1326,21 @@ function renderQuestion() {
     btn.onclick = () => selectAnswer(opt.value, btn);
     container.appendChild(btn);
   });
+
+  // ── GTM: 장체류 타이머 시작 ─────────────────────────────
+  startLongStayTimer(currentQ);
 }
 
 function goBack() {
   if (currentQ <= 0) return;
+
+  // ── GTM: quiz_back ────────────────────────────────────
+  clearLongStayTimer();
+  dlPush('quiz_back', {
+    quiz_id: QUIZ_ID,
+    from_step: currentQ + 1,
+    to_step: currentQ
+  });
 
   // 현재 문항에서 이전 문항으로 돌아갈 때 점수 되돌리기
   const prevAnswer = answers[currentQ - 1];
@@ -1282,11 +1362,26 @@ function getMBTI() {
 }
 
 function showResult() {
+  // ── GTM: 타이머 종료 ──────────────────────────────────
+  clearLongStayTimer();
+
   document.getElementById('quiz-screen').style.display = 'none';
   document.getElementById('result-screen').style.display = 'block';
 
   const mbti = getMBTI();
   const data = mbtiData[mbti];
+
+  // ── GTM: quiz_complete ────────────────────────────────
+  dlPush('quiz_complete', {
+    quiz_id: QUIZ_ID,
+    result_type: mbti,
+    result_name: data ? data.name : null,
+    axis_E_I: scores.E >= scores.I ? 'E' : 'I',
+    axis_S_N: scores.S >= scores.N ? 'S' : 'N',
+    axis_T_F: scores.T >= scores.F ? 'T' : 'F',
+    axis_J_P: scores.J >= scores.P ? 'J' : 'P',
+    duration_sec: quizStartTs ? Math.round((Date.now() - quizStartTs) / 1000) : null
+  });
 
   document.getElementById('result-emoji').textContent = data.emoji;
   document.getElementById('result-type').textContent = data.name;
@@ -1320,6 +1415,13 @@ function showResult() {
 }
 
 function saveImage() {
+  // ── GTM: share_action (image_save) ────────────────────
+  dlPush('share_action', {
+    quiz_id: QUIZ_ID,
+    share_type: 'image_save',
+    result_type: getCurrentMBTI()
+  });
+
   const btn = document.querySelector('.share-section .btn-secondary');
   const orig = btn.textContent;
   btn.textContent = '⏳ 저장 중...';
@@ -1416,6 +1518,13 @@ function captureResult(btn, orig) {
 }
 
 function copyLink() {
+  // ── GTM: share_action (link_copy) ─────────────────────
+  dlPush('share_action', {
+    quiz_id: QUIZ_ID,
+    share_type: 'link_copy',
+    result_type: getCurrentMBTI()
+  });
+
   const url = window.location.href;
   if (navigator.clipboard) {
     navigator.clipboard.writeText(url).then(() => {
@@ -1436,6 +1545,14 @@ function copyLink() {
 }
 
 function restart() {
+  // ── GTM: share_action (restart) ───────────────────────
+  dlPush('share_action', {
+    quiz_id: QUIZ_ID,
+    share_type: 'restart',
+    result_type: getCurrentMBTI()
+  });
+
+  clearLongStayTimer();
   currentQ = 0;
   scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
   answers = [];
@@ -1445,6 +1562,33 @@ function restart() {
   document.getElementById('intro-screen').style.display = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+/* ============================================================
+ * GTM: CTA 클릭 추적 (DOMContentLoaded 1회 등록)
+ *  - #blog-link / #blog-btn  → cta_blog_recommended
+ *  - .cta-btn-primary        → cta_blog_board
+ *  - .cta-btn-secondary      → cta_book_shop
+ * ============================================================ */
+document.addEventListener('DOMContentLoaded', function () {
+  function bindCta(selector, name) {
+    document.querySelectorAll(selector).forEach(function (el) {
+      el.addEventListener('click', function () {
+        var label = (el.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+        var dest = el.getAttribute('href') || (el.querySelector('a') && el.querySelector('a').getAttribute('href')) || null;
+        dlPush('cta_click', {
+          quiz_id: QUIZ_ID,
+          button_name: name,
+          button_label: label,
+          button_destination: dest,
+          result_type: getCurrentMBTI()
+        });
+      });
+    });
+  }
+  bindCta('#blog-link, #blog-btn', 'cta_blog_recommended');
+  bindCta('.cta-btn-primary',      'cta_blog_board');
+  bindCta('.cta-btn-secondary',    'cta_book_shop');
+});
 </script>
 </body>
 </html>
