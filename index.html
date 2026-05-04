@@ -19,7 +19,15 @@
     --shadow: 0 8px 32px rgba(255, 107, 43, 0.15);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  .option-btn {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
 
   body {
     font-family: 'Noto Sans KR', sans-serif;
@@ -231,6 +239,12 @@
 
   .option-btn:hover::before { opacity: 1; }
 
+  /* 모바일 active 상태 명시적 제어 */
+  .option-btn:active {
+    transform: scale(0.98);
+    transition: none;
+  }
+
   .option-btn.selected {
     border-color: var(--orange);
     background: var(--orange-pale);
@@ -238,6 +252,7 @@
     font-weight: 700;
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(255,107,43,0.2);
+    transition: none; /* 선택 후 transition 즉시 제거 */
   }
 
   .option-btn.selected::after {
@@ -1174,20 +1189,15 @@ function startQuiz() {
 }
 
 function selectAnswer(value, btn) {
-  const allBtns = document.querySelectorAll('.option-btn');
-  allBtns.forEach(b => {
+  // 즉시 모든 버튼 비활성화
+  document.querySelectorAll('.option-btn').forEach(b => {
     b.onclick = null;
     b.style.pointerEvents = 'none';
   });
-
   btn.classList.add('selected');
+
   answers[currentQ] = value;
   scores[value]++;
-
-  // 카드 즉시 숨기고 → 내용 교체 → 다시 표시
-  const card = document.getElementById('question-card');
-  card.style.visibility = 'hidden';
-  card.style.opacity = '0';
 
   setTimeout(() => {
     currentQ++;
@@ -1196,41 +1206,41 @@ function selectAnswer(value, btn) {
     } else {
       showResult();
     }
-  }, 150);
+  }, 200);
 }
 
 function renderQuestion() {
-  const card = document.getElementById('question-card');
-
-  // 먼저 숨긴 상태로 내용 교체
-  card.style.visibility = 'hidden';
-  card.style.opacity = '0';
-
   const q = shuffledQuestions[currentQ];
-  document.getElementById('question-num').textContent = `Q${currentQ + 1}`;
-  document.getElementById('question-text').textContent = q.text;
+
   document.getElementById('progress-count').textContent = `${currentQ + 1} / 12`;
   document.getElementById('progress-fill').style.width = `${((currentQ + 1) / 12) * 100}%`;
 
-  const backBtn = document.getElementById('back-btn');
-  backBtn.style.display = currentQ >= 1 ? 'block' : 'none';
+  // 기존 카드를 완전히 새 카드로 교체 (이전 상태 잔상 원천 차단)
+  const oldCard = document.getElementById('question-card');
+  const newCard = document.createElement('div');
+  newCard.id = 'question-card';
+  newCard.className = 'card fade-in';
 
-  const container = document.getElementById('options-container');
-  container.innerHTML = '';
+  const backBtn = currentQ >= 1
+    ? `<button class="back-btn" onclick="goBack()">← 이전 문항</button>`
+    : '';
 
+  newCard.innerHTML = `
+    <div class="question-num">Q${currentQ + 1}</div>
+    <div class="question-text">${q.text}</div>
+    <div class="options" id="options-container"></div>
+    ${backBtn}
+  `;
+
+  oldCard.parentNode.replaceChild(newCard, oldCard);
+
+  const container = newCard.querySelector('#options-container');
   q.options.forEach((opt) => {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
     btn.textContent = opt.text;
     btn.onclick = () => selectAnswer(opt.value, btn);
     container.appendChild(btn);
-  });
-
-  // 내용 교체 완료 후 카드 표시 (transition으로 부드럽게)
-  requestAnimationFrame(() => {
-    card.style.transition = 'opacity 0.25s ease';
-    card.style.visibility = 'visible';
-    card.style.opacity = '1';
   });
 }
 
