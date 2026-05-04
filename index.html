@@ -230,17 +230,21 @@
     transition: opacity 0.2s;
   }
 
-  .option-btn:hover {
-    border-color: var(--orange-light);
-    background: var(--orange-pale);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(255,107,43,0.12);
+  /* PC에서만 hover 효과 적용 - 모바일 sticky hover 방지 */
+  @media (hover: hover) {
+    .option-btn:hover {
+      border-color: var(--orange-light);
+      background: var(--orange-pale);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(255,107,43,0.12);
+    }
+    .option-btn:hover::before { opacity: 1; }
   }
 
-  .option-btn:hover::before { opacity: 1; }
-
-  /* 모바일 active 상태 명시적 제어 */
+  /* 모바일 터치 시 짧은 피드백만 */
   .option-btn:active {
+    background: var(--orange-pale);
+    border-color: var(--orange-light);
     transform: scale(0.98);
     transition: none;
   }
@@ -252,7 +256,7 @@
     font-weight: 700;
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(255,107,43,0.2);
-    transition: none; /* 선택 후 transition 즉시 제거 */
+    transition: none;
   }
 
   .option-btn.selected::after {
