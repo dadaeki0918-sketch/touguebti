@@ -1191,8 +1191,19 @@ function renderQuestion() {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
     btn.textContent = opt.text;
+    btn.style.opacity = '0';
     btn.onclick = () => selectAnswer(opt.value, btn);
     container.appendChild(btn);
+  });
+
+  // 카드 전체 fade 대신 개별 버튼 fade-in (잔상 방지)
+  requestAnimationFrame(() => {
+    container.querySelectorAll('.option-btn').forEach((btn, i) => {
+      setTimeout(() => {
+        btn.style.transition = 'opacity 0.2s ease';
+        btn.style.opacity = '1';
+      }, i * 40);
+    });
   });
 
   const card = document.getElementById('question-card');
@@ -1202,26 +1213,32 @@ function renderQuestion() {
 }
 
 function selectAnswer(value, btn) {
-  // 중복 클릭 방지
-  document.querySelectorAll('.option-btn').forEach(b => {
+  // 중복 클릭 방지 - 즉시 모든 버튼 비활성화
+  const allBtns = document.querySelectorAll('.option-btn');
+  allBtns.forEach(b => {
     b.onclick = null;
     b.style.pointerEvents = 'none';
   });
+
+  // 선택 표시
   btn.classList.add('selected');
 
   answers[currentQ] = value;
   scores[value]++;
 
-  setTimeout(() => {
-    // 다음 문항 렌더링 전 컨테이너 즉시 초기화
-    document.getElementById('options-container').innerHTML = '';
-    currentQ++;
-    if (currentQ < shuffledQuestions.length) {
-      renderQuestion();
-    } else {
-      showResult();
-    }
-  }, 300);
+  // 선택 피드백 후 즉시 컨텐츠 교체 (setTimeout 없음)
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.getElementById('options-container').innerHTML = '';
+      document.getElementById('question-text').textContent = '';
+      currentQ++;
+      if (currentQ < shuffledQuestions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    });
+  });
 }
 
 function goBack() {
