@@ -1210,6 +1210,8 @@ function selectAnswer(value, btn) {
   scores[value]++;
 
   setTimeout(() => {
+    // 선택 상태 초기화 후 다음 문항으로
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
     currentQ++;
     if (currentQ < shuffledQuestions.length) {
       renderQuestion();
